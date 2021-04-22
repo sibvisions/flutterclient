@@ -21,6 +21,12 @@ class ContainerComponentModel extends ComponentModel {
 
   CoLayout? layout;
 
+  Size? preferredLayoutSize;
+  Size? minimumLayoutSize;
+  Size? maximumLayoutSize;
+  //bool valid = false;
+  //String debugInfo = "";
+
   get layoutName {
     List<String>? parameter = layoutString?.split(",");
     if (parameter != null && parameter.length > 0) {

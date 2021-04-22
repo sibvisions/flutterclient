@@ -5,18 +5,41 @@ import 'package:flutter/rendering.dart';
 
 class CoLayoutRenderBox extends RenderBox {
   // only used in parent layouts
-  Size? preferredLayoutSize;
+  Size? _preferredLayoutSize;
   Size? minimumLayoutSize;
   Size? maximumLayoutSize;
   bool valid = false;
   String debugInfo = "";
 
+  Size? get preferredLayoutSize {
+    if (_preferredLayoutSize != null && _preferredLayoutSize!.height == 55)
+      return null;
+    //return Size(_preferredLayoutSize!.width, _preferredLayoutSize!.height);
+    return _preferredLayoutSize;
+  }
+
+  set preferredLayoutSize(Size? value) {
+    _preferredLayoutSize = value;
+  }
+
   Size? getChildLayoutPreferredSize(RenderBox renderBox) {
+    CoLayoutRenderBox? nextLayoutRenderBox = getNextLayoutRenderBox(renderBox);
+
     if (renderBox is RenderShiftedBox && renderBox.child is CoLayoutRenderBox) {
       CoLayoutRenderBox childLayout = renderBox.child as CoLayoutRenderBox;
 
       log("$debugInfo returns preferredLayoutSize ${childLayout.preferredLayoutSize}");
       return childLayout.preferredLayoutSize;
+    }
+
+    return null;
+  }
+
+  CoLayoutRenderBox? getNextLayoutRenderBox(RenderBox renderBox) {
+    if (renderBox is RenderShiftedBox) {
+      if (renderBox is CoLayoutRenderBox) return renderBox as CoLayoutRenderBox;
+      if (renderBox.child != null)
+        return getNextLayoutRenderBox(renderBox.child!);
     }
 
     return null;

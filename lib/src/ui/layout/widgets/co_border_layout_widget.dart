@@ -182,16 +182,35 @@ class RenderBorderLayoutWidget extends CoLayoutRenderBox
     maximumLayoutSize = _maximumLayoutSize(
         container?.componentModel as ContainerComponentModel);
 
+    if (container != null &&
+        container!.componentModel is ContainerComponentModel) {
+      ContainerComponentModel model =
+          (container!.componentModel as ContainerComponentModel);
+      model.preferredLayoutSize = _preferredLayoutSize(
+          container?.componentModel as ContainerComponentModel);
+      model.minimumLayoutSize = _minimumLayoutSize(
+          container?.componentModel as ContainerComponentModel);
+      model.maximumLayoutSize = _maximumLayoutSize(
+          container?.componentModel as ContainerComponentModel);
+    }
+
     // layout NORTH
     if (north != null) {
       double minWidth = width;
       double minHeight = 0;
       double maxHeight = double.infinity;
 
-      if (northComp!.componentModel.isPreferredSizeSet) {
-        maxHeight = northComp!.componentModel.preferredSize!.height;
-        //minHeight = maxHeight;
+      Size? prefSize = getPreferredSize(north!, constraints, northComp!);
+
+      if (prefSize != null && prefSize.height != double.infinity) {
+        maxHeight = prefSize.height;
+        minHeight = maxHeight;
       }
+
+      // if (northComp!.componentModel.isPreferredSizeSet) {
+      //   maxHeight = northComp!.componentModel.preferredSize!.height;
+      //   //minHeight = maxHeight;
+      // }
 
       if (minWidth == double.infinity) minWidth = 0;
 
@@ -344,11 +363,22 @@ class RenderBorderLayoutWidget extends CoLayoutRenderBox
 
       if (minWidth == double.infinity) minWidth = 0;
 
-      if (height == double.infinity &&
-          centerComp!.componentModel.isPreferredSizeSet) {
-        height = centerComp!.componentModel.preferredSize!.height;
+      if (centerComp!.componentModel.componentId == "SP712") {
+        int i = 0;
+      }
+
+      Size? prefSize = getPreferredSize(center!, constraints, centerComp!);
+
+      if (prefSize != null && prefSize.height != double.infinity) {
+        height = prefSize.height;
         minHeight = height;
       }
+
+      // if (height == double.infinity &&
+      //     centerComp!.componentModel.isPreferredSizeSet) {
+      //   height = centerComp!.componentModel.preferredSize!.height;
+      //   minHeight = height;
+      // }
 
       if (width == double.infinity &&
           centerComp!.componentModel.isPreferredSizeSet) {

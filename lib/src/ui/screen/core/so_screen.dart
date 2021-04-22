@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -128,6 +130,8 @@ class SoScreenState<T extends SoScreen> extends State<T> with SoDataScreen {
         } else {
           _updateComponent(changedComponent, _components);
         }
+
+        relayoutParentLayouts(changedComponent.id!);
       }
     }
   }
@@ -373,6 +377,24 @@ class SoScreenState<T extends SoScreen> extends State<T> with SoDataScreen {
     }
   }
 
+  void relayoutParentLayouts(String componentId) {
+    if (_components.containsKey(componentId)) {
+      ComponentWidget componentWidget = _components[componentId]!;
+      if (componentWidget.componentModel is ContainerComponentModel) {
+        ContainerComponentModel model =
+            (componentWidget.componentModel as ContainerComponentModel);
+        if (model.layout != null) {
+          model.layout!.setState!(() {});
+        }
+        // to do force build
+      }
+
+      if (componentWidget.componentModel.parentComponentId.isNotEmpty) {
+        relayoutParentLayouts(componentWidget.componentModel.parentComponentId);
+      }
+    }
+  }
+
   ComponentWidget? getRootComponent() {
     ComponentWidget? rootComponent;
     try {
@@ -468,11 +490,11 @@ class SoScreenState<T extends SoScreen> extends State<T> with SoDataScreen {
   void debugPrintCurrentWidgetTree() {
     ComponentWidget? component = getRootComponent();
     if (_debug && component != null) {
-      print("--------------------");
-      print("Current widget tree:");
-      print("--------------------");
+      log("--------------------");
+      log("Current widget tree:");
+      log("--------------------");
       debugPrintComponent(component, 0);
-      print("--------------------");
+      log("--------------------");
     }
   }
 
@@ -512,14 +534,14 @@ class SoScreenState<T extends SoScreen> extends State<T> with SoDataScreen {
               : "") +
           ", childCount: " +
           containerComponentModel.components.length.toString();
-      print(debugString);
+      log(debugString);
       if (containerComponentModel.components.isNotEmpty) {
         containerComponentModel.components.forEach((c) {
           debugPrintComponent(c, (level + 1));
         });
       }
     } else {
-      print(debugString);
+      log(debugString);
     }
   }
 

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 
 import 'co_container_widget.dart';
@@ -50,28 +52,28 @@ class CoScrollPanelWidgetState extends CoContainerWidgetState {
 
     Widget scrollWidget = new LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
+      log("ScrollPanelWidget get constraints: ${constraints.toString()}");
       //this.constr = constraints;
 
-      // return SingleChildScrollView(
-      //     key: this.componentId,
-      //     child: Container(color: this.background, child: child));
       return Container(
-          color: widget.componentModel.background,
-          child: SingleChildScrollView(
-              controller: _scrollController,
-              // key: this.componentId,
-              child: CoScrollPanelLayout(
-                preferredConstraints:
-                    CoScrollPanelConstraints(constraints, componentModel),
-                container: widget.componentModel as ContainerComponentModel,
-                children: [
-                  CoScrollPanelLayoutId(
-                      // key: ValueKey(widget.key),
-                      constraints:
-                          CoScrollPanelConstraints(constraints, componentModel),
-                      child: child ?? Container())
-                ],
-              )));
+          color: widget.componentModel.background, child: child ?? Container());
+
+      // return Container(
+      //     color: widget.componentModel.background,
+      //     child: SingleChildScrollView(
+      //         controller: _scrollController,
+      //         child: CoScrollPanelLayout(
+      //           preferredConstraints:
+      //               CoScrollPanelConstraints(constraints, componentModel),
+      //           container: widget.componentModel as ContainerComponentModel,
+      //           children: [
+      //             CoScrollPanelLayoutId(
+      //                 // key: ValueKey(widget.key),
+      //                 constraints:
+      //                     CoScrollPanelConstraints(constraints, componentModel),
+      //                 child: child ?? Container())
+      //           ],
+      //         )));
     });
 
     if (child != null) {
