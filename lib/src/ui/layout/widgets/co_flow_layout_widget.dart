@@ -217,6 +217,16 @@ class RenderFlowLayoutWidget extends CoLayoutRenderBox
         container?.componentModel as ContainerComponentModel);
     maximumLayoutSize = preferredLayoutSize;
 
+    if (container?.componentModel is ContainerComponentModel) {
+      ContainerComponentModel containerModel =
+          container?.componentModel as ContainerComponentModel;
+      containerModel.preferredLayoutSize = _preferredLayoutSize(
+          container?.componentModel as ContainerComponentModel);
+      containerModel.minimumLayoutSize = _minimumLayoutSize(
+          container?.componentModel as ContainerComponentModel);
+      containerModel.maximumLayoutSize = preferredLayoutSize;
+    }
+
     Size dimSize = this.constraints.biggest;
     dimSize = Size(dimSize.width - (insMargins!.left + insMargins!.right),
         dimSize.height - (insMargins!.top + insMargins!.bottom));
@@ -547,7 +557,10 @@ class RenderFlowLayoutWidget extends CoLayoutRenderBox
 
   Size getPreferredSize(RenderBox renderBox, ComponentWidget comp) {
     if (!comp.componentModel.isPreferredSizeSet) {
-      Size? size = getChildLayoutPreferredSize(renderBox);
+      //Size? size = getChildLayoutPreferredSize(renderBox);
+      Size? size;
+      if (container != null)
+        size = getChildLayoutMinimumSize(container!.componentModel);
       if (size != null) {
         return size;
       } else {

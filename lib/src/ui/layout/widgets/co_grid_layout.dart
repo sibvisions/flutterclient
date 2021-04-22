@@ -157,6 +157,17 @@ class RenderGridLayoutWidget extends CoLayoutRenderBox
     maximumLayoutSize =
         _maximumLayoutSize(container.componentModel as ContainerComponentModel);
 
+    if (container.componentModel is ContainerComponentModel) {
+      ContainerComponentModel containerModel =
+          container.componentModel as ContainerComponentModel;
+      containerModel.preferredLayoutSize = _preferredLayoutSize(
+          container.componentModel as ContainerComponentModel);
+      containerModel.minimumLayoutSize = _minimumLayoutSize(
+          container.componentModel as ContainerComponentModel);
+      containerModel.maximumLayoutSize = _maximumLayoutSize(
+          container.componentModel as ContainerComponentModel);
+    }
+
     Size size = constraints.biggest;
     int targetColumns = columns;
     int targetRows = rows;
@@ -289,7 +300,8 @@ class RenderGridLayoutWidget extends CoLayoutRenderBox
   Size getPreferredSize(
       RenderBox renderBox, CoGridLayoutConstraints constraint) {
     if (!constraint.comp!.componentModel.isPreferredSizeSet) {
-      Size? size = getChildLayoutPreferredSize(renderBox);
+      //Size? size = getChildLayoutPreferredSize(renderBox);
+      Size? size = getChildLayoutPreferredSize(container.componentModel);
       if (size != null) {
         return size;
       } else {

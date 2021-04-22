@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutterclient/flutterclient.dart';
 
 class CoLayoutRenderBox extends RenderBox {
   // only used in parent layouts
@@ -11,36 +12,53 @@ class CoLayoutRenderBox extends RenderBox {
   bool valid = false;
   String debugInfo = "";
 
-  Size? getChildLayoutPreferredSize(RenderBox renderBox) {
-    if (renderBox is RenderShiftedBox && renderBox.child is CoLayoutRenderBox) {
-      CoLayoutRenderBox childLayout = renderBox.child as CoLayoutRenderBox;
-
-      log("$debugInfo returns preferredLayoutSize ${childLayout.preferredLayoutSize}");
-      return childLayout.preferredLayoutSize;
-    }
+  Size? getChildLayoutPreferredSize(ComponentModel model) {
+    if (model is ContainerComponentModel) return model.preferredLayoutSize;
 
     return null;
   }
 
-  Size? getChildLayoutMinimumSize(RenderBox renderBox) {
-    if (renderBox is RenderShiftedBox && renderBox.child is CoLayoutRenderBox) {
-      CoLayoutRenderBox childLayout = renderBox.child as CoLayoutRenderBox;
-
-      return childLayout.minimumLayoutSize;
-    }
+  Size? getChildLayoutMinimumSize(ComponentModel model) {
+    if (model is ContainerComponentModel) return model.minimumLayoutSize;
 
     return null;
   }
 
-  Size? getChildLayoutMaximumSize(RenderBox renderBox) {
-    if (renderBox is RenderShiftedBox && renderBox.child is CoLayoutRenderBox) {
-      CoLayoutRenderBox childLayout = renderBox.child as CoLayoutRenderBox;
-
-      return childLayout.maximumLayoutSize;
-    }
+  Size? getChildLayoutMaximumSize(ComponentModel model) {
+    if (model is ContainerComponentModel) return model.maximumLayoutSize;
 
     return null;
   }
+  // Size? getChildLayoutPreferredSize(RenderBox renderBox) {
+  //   if (renderBox is RenderShiftedBox && renderBox.child is CoLayoutRenderBox) {
+  //     CoLayoutRenderBox childLayout = renderBox.child as CoLayoutRenderBox;
+
+  //     log("$debugInfo returns preferredLayoutSize ${childLayout.preferredLayoutSize}");
+  //     return childLayout.preferredLayoutSize;
+  //   }
+
+  //   return null;
+  // }
+
+  // Size? getChildLayoutMinimumSize(RenderBox renderBox) {
+  //   if (renderBox is RenderShiftedBox && renderBox.child is CoLayoutRenderBox) {
+  //     CoLayoutRenderBox childLayout = renderBox.child as CoLayoutRenderBox;
+
+  //     return childLayout.minimumLayoutSize;
+  //   }
+
+  //   return null;
+  // }
+
+  // Size? getChildLayoutMaximumSize(RenderBox renderBox) {
+  //   if (renderBox is RenderShiftedBox && renderBox.child is CoLayoutRenderBox) {
+  //     CoLayoutRenderBox childLayout = renderBox.child as CoLayoutRenderBox;
+
+  //     return childLayout.maximumLayoutSize;
+  //   }
+
+  //   return null;
+  // }
 
   Size layoutRenderBox(RenderBox renderBox, BoxConstraints constraints) {
     if (constraints.maxHeight == double.infinity &&

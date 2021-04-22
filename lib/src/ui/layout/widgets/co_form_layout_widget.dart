@@ -318,6 +318,17 @@ class RenderFormLayoutWidget extends CoLayoutRenderBox
     maximumLayoutSize =
         _maximumLayoutSize(container.componentModel as ContainerComponentModel);
 
+    if (container.componentModel is ContainerComponentModel) {
+      ContainerComponentModel containerModel =
+          container.componentModel as ContainerComponentModel;
+      containerModel.preferredLayoutSize = _preferredLayoutSize(
+          container.componentModel as ContainerComponentModel);
+      containerModel.minimumLayoutSize = _minimumLayoutSize(
+          container.componentModel as ContainerComponentModel);
+      containerModel.maximumLayoutSize = _maximumLayoutSize(
+          container.componentModel as ContainerComponentModel);
+    }
+
     calculateAnchors(container.componentModel as ContainerComponentModel);
 
     layoutWidth = preferredWidth.toDouble();
@@ -531,8 +542,8 @@ class RenderFormLayoutWidget extends CoLayoutRenderBox
   Size getPreferredSize(
       RenderBox renderBox, CoFormLayoutConstraint constraint) {
     if (!constraint.comp!.componentModel.isPreferredSizeSet) {
-      Size? size = getChildLayoutPreferredSize(renderBox);
-
+      //Size? size = getChildLayoutPreferredSize(renderBox);
+      Size? size = getChildLayoutPreferredSize(container.componentModel);
       if (size != null) {
         return size;
       } else {
@@ -573,7 +584,8 @@ class RenderFormLayoutWidget extends CoLayoutRenderBox
 
   Size getMinimumSize(RenderBox renderBox, CoFormLayoutConstraint constraint) {
     if (!constraint.comp!.componentModel.isMinimumSizeSet) {
-      Size? size = getChildLayoutMinimumSize(renderBox);
+      //Size? size = getChildLayoutMinimumSize(renderBox);
+      Size? size = getChildLayoutMinimumSize(container.componentModel);
 
       if (size != null) {
         return size;

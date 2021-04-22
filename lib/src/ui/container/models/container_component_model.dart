@@ -21,6 +21,46 @@ class ContainerComponentModel extends ComponentModel {
 
   CoLayout? layout;
 
+  Size? _preferredLayoutSize;
+  Size? _minimumLayoutSize;
+  Size? _maximumLayoutSize;
+
+  Size? get preferredLayoutSize {
+    return _preferredLayoutSize;
+  }
+
+  set preferredLayoutSize(Size? value) {
+    if (value != null &&
+        (value.width == double.infinity && value.height == double.infinity)) {
+      _preferredLayoutSize = null;
+    } else
+      _preferredLayoutSize = value;
+  }
+
+  Size? get minimumLayoutSize {
+    return _minimumLayoutSize;
+  }
+
+  set minimumLayoutSize(Size? value) {
+    if (value != null &&
+        (value.width == double.infinity || value.height == double.infinity)) {
+      _minimumLayoutSize = null;
+    } else
+      _minimumLayoutSize = value;
+  }
+
+  Size? get maximumLayoutSize {
+    return _maximumLayoutSize;
+  }
+
+  set maximumLayoutSize(Size? value) {
+    if (value != null &&
+        (value.width == double.infinity || value.height == double.infinity)) {
+      _maximumLayoutSize = null;
+    } else
+      _maximumLayoutSize = value;
+  }
+
   get layoutName {
     List<String>? parameter = layoutString?.split(",");
     if (parameter != null && parameter.length > 0) {
@@ -81,6 +121,10 @@ class ContainerComponentModel extends ComponentModel {
         layout!.addLayoutComponent(pComponent, pConstraints);
       }
     }
+
+    preferredLayoutSize = null;
+    maximumLayoutSize = null;
+    minimumLayoutSize = null;
 
     notifyListeners();
   }

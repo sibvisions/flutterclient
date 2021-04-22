@@ -76,6 +76,14 @@ class RenderScrollPanelLayout extends CoLayoutRenderBox
     this.maximumLayoutSize = this.constraints.biggest;
     this.minimumLayoutSize = this.constraints.biggest;
 
+    if (container is ContainerComponentModel) {
+      ContainerComponentModel containerModel =
+          container as ContainerComponentModel;
+      containerModel.preferredLayoutSize = this.constraints.biggest;
+      containerModel.minimumLayoutSize = this.constraints.biggest;
+      containerModel.maximumLayoutSize = this.constraints.biggest;
+    }
+
     Size? preferredSize;
 
     if (child != null) {

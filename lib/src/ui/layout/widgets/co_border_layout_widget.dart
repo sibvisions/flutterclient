@@ -182,6 +182,17 @@ class RenderBorderLayoutWidget extends CoLayoutRenderBox
     maximumLayoutSize = _maximumLayoutSize(
         container?.componentModel as ContainerComponentModel);
 
+    if (container?.componentModel is ContainerComponentModel) {
+      ContainerComponentModel containerModel =
+          container?.componentModel as ContainerComponentModel;
+      containerModel.preferredLayoutSize = _preferredLayoutSize(
+          container?.componentModel as ContainerComponentModel);
+      containerModel.minimumLayoutSize = _minimumLayoutSize(
+          container?.componentModel as ContainerComponentModel);
+      containerModel.maximumLayoutSize = _maximumLayoutSize(
+          container?.componentModel as ContainerComponentModel);
+    }
+
     // layout NORTH
     if (north != null) {
       double minWidth = width;
@@ -585,7 +596,11 @@ class RenderBorderLayoutWidget extends CoLayoutRenderBox
   Size? getPreferredSize(
       RenderBox renderBox, BoxConstraints constraints, ComponentWidget comp) {
     if (!comp.componentModel.isPreferredSizeSet) {
-      Size? size = getChildLayoutPreferredSize(renderBox);
+      //Size? size = getChildLayoutPreferredSize(renderBox);
+      Size? size;
+      if (container != null)
+        size = getChildLayoutMinimumSize(container!.componentModel);
+
       if (size != null) {
         return size;
       } else {
@@ -613,7 +628,10 @@ class RenderBorderLayoutWidget extends CoLayoutRenderBox
   Size? getMinimumSize(
       RenderBox renderBox, BoxConstraints constraints, ComponentWidget comp) {
     if (!comp.componentModel.isMinimumSizeSet) {
-      Size? size = getChildLayoutMinimumSize(renderBox);
+      // Size? size = getChildLayoutMinimumSize(renderBox);
+      Size? size;
+      if (container != null)
+        size = getChildLayoutMinimumSize(container!.componentModel);
       if (size != null)
         return size;
       else {
