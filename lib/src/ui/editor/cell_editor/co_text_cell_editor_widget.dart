@@ -1,4 +1,7 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../../../util/app/so_text_align.dart';
 import 'co_cell_editor_widget.dart';
@@ -149,27 +152,46 @@ class CoTextCellEditorWidgetState
       child: Container(
         width: 100,
         height: (widget.cellEditorModel.multiLine ? 100 : 50),
-        child: TextFormField(
-          textAlign: SoTextAlign.getTextAlignFromInt(
-              widget.cellEditorModel.horizontalAlignment),
-          textAlignVertical: SoTextAlignVertical.getTextAlignFromInt(
-              widget.cellEditorModel.verticalAlignment),
-          decoration: InputDecoration(
-              contentPadding: widget.cellEditorModel.textPadding,
-              border: InputBorder.none,
-              hintText: widget.cellEditorModel.placeholder,
-              suffixIcon: suffixIcon),
-          style: textStyle,
-          controller: widget.cellEditorModel.textController,
+        child: RawKeyboardListener(
           focusNode: widget.cellEditorModel.focusNode,
-          maxLines: widget.cellEditorModel.multiLine ? null : 1,
-          keyboardType: widget.cellEditorModel.multiLine
-              ? TextInputType.multiline
-              : TextInputType.text,
-          onEditingComplete: onTextFieldEndEditing,
-          onChanged: onTextFieldValueChanged,
-          readOnly: !widget.cellEditorModel.editable,
-          obscureText: widget.cellEditorModel.password,
+          onKey: (RawKeyEvent event) {
+            if (event.logicalKey == LogicalKeyboardKey.backspace &&
+                event.runtimeType.toString() == 'RawKeyUpEvent') {
+              String currentVal =
+                  widget.cellEditorModel.textController.value.text;
+
+              int position =
+                  widget.cellEditorModel.textController.selection.extentOffset;
+
+              widget.cellEditorModel.textController.text =
+                  currentVal.substring(0, position - 1);
+
+              widget.cellEditorModel.textController.selection =
+                  TextSelection.fromPosition(TextPosition(offset: position));
+            }
+          },
+          child: TextField(
+            textAlign: SoTextAlign.getTextAlignFromInt(
+                widget.cellEditorModel.horizontalAlignment),
+            textAlignVertical: SoTextAlignVertical.getTextAlignFromInt(
+                widget.cellEditorModel.verticalAlignment),
+            decoration: InputDecoration(
+                contentPadding: widget.cellEditorModel.textPadding,
+                border: InputBorder.none,
+                hintText: widget.cellEditorModel.placeholder,
+                suffixIcon: suffixIcon),
+            style: textStyle,
+            controller: widget.cellEditorModel.textController,
+            // focusNode: widget.cellEditorModel.focusNode,
+            maxLines: widget.cellEditorModel.multiLine ? null : 1,
+            keyboardType: widget.cellEditorModel.multiLine
+                ? TextInputType.multiline
+                : TextInputType.text,
+            onEditingComplete: onTextFieldEndEditing,
+            onChanged: onTextFieldValueChanged,
+            readOnly: !widget.cellEditorModel.editable,
+            obscureText: widget.cellEditorModel.password,
+          ),
         ),
       ),
     );
